@@ -5,12 +5,11 @@ issuer = "http://localhost:3000"
 
 [auth]
 private_key_path = "src/private_key.pem"
+public_key_path = "src/public_key.pem"
 key_id = "1"
 kty = "RSA"
 use = "sig"
 alg = "RS256"
-n = "wE1n7v-0h3mx8RmflcJdO0HMIxCSFBiQBga8t1Vj2uH6HPLkKAMG1iSsckoQzoxaEIUhDB_i03R6fAkFVLOWsfjTEU6SJWaIDiGIUySsiiCWwSDaom3klQLDRz6kJZ9A1MWfq8toeh7hfp_hQR9whv7E2nc7TuYTcQc01YURO64JRR-B124lPfTIz6UJReThF55ffWuf7-aR86ipZvv2WLwuiWdpyYbtHTAwa4Jz3RtuPhk1M3z4kvbzk1jzezIvEZsJ12nLy81hjpVsO3JtghWq1LdNgzUzBF5IQCGg2QLi20IAiTZj2qFA7iae4x9o06pI8uQ_ucO8KuN2s3qMcQ"
-e = "AQAB"
 
 [kerberos]
 # Set to true to enable real krb5-rs validation (requires keytab)

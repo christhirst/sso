@@ -43,6 +43,15 @@ async fn main() -> anyhow::Result<()> {
     let private_key_pem = std::fs::read_to_string(&settings.auth.private_key_path)?;
     let private_key = EncodingKey::from_rsa_pem(private_key_pem.as_bytes())?;
 
+    // Load and parse the public key PEM file to extract modulus and exponent for JWK
+    let public_key_pem = std::fs::read_to_string(&settings.auth.public_key_path)?;
+    use rsa::{RsaPublicKey, traits::PublicKeyParts, pkcs8::DecodePublicKey};
+    let public_key = RsaPublicKey::from_public_key_pem(&public_key_pem)?;
+    
+    use base64::{prelude::BASE64_URL_SAFE_NO_PAD, Engine};
+    let n_b64 = BASE64_URL_SAFE_NO_PAD.encode(public_key.n().to_bytes_be());
+    let e_b64 = BASE64_URL_SAFE_NO_PAD.encode(public_key.e().to_bytes_be());
+
     let public_key_jwk = serde_json::json!({
         "keys": [
             {
@@ -50,8 +59,8 @@ async fn main() -> anyhow::Result<()> {
                 "use": settings.auth.jwk_use,
                 "kid": settings.auth.key_id,
                 "alg": settings.auth.alg,
-                "n": settings.auth.n,
-                "e": settings.auth.e
+                "n": n_b64,
+                "e": e_b64
             }
         ]
     });

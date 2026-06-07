@@ -20,13 +20,12 @@ pub struct ServerSettings {
 #[derive(Debug, Deserialize, Clone)]
 pub struct AuthSettings {
     pub private_key_path: String,
+    pub public_key_path: String,
     pub key_id: String,
     pub kty: String,
     #[serde(rename = "use")]
     pub jwk_use: String,
     pub alg: String,
-    pub n: String,
-    pub e: String,
 }
 
 #[derive(Debug, Deserialize, Clone)]
