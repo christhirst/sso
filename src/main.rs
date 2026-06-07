@@ -8,7 +8,7 @@ use types::*;
 use axum::{
     extract::{Query, State, FromRequestParts},
     http::{header, request::Parts, StatusCode},
-    response::{IntoResponse, Redirect, Json, Response},
+    response::{IntoResponse, Redirect, Json, Response, Html},
     routing::{get, post},
     Router,
     Form,
@@ -73,6 +73,7 @@ async fn main() -> anyhow::Result<()> {
     };
 
     let app = Router::new()
+        .route("/", get(index))
         .route("/.well-known/openid-configuration", get(oidc_config))
         .route("/jwks", get(jwks))
         .route("/authorize", get(authorize))
@@ -273,4 +274,10 @@ async fn oidc_config(State(state): State<AppState>) -> impl IntoResponse {
         "token_endpoint_auth_methods_supported": ["client_secret_post", "client_secret_basic"]
     });
     Json(config)
+}
+
+async fn index(KerberosAuth(upn): KerberosAuth) -> impl IntoResponse {
+    let html_template = include_str!("index.html");
+    let html_content = html_template.replace("{username}", &upn);
+    Html(html_content)
 }
